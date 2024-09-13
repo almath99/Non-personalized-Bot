@@ -1,0 +1,225 @@
+version: '3.1'
+
+intents:
+- affirm
+- request_identify
+- personalized_recommendation
+- no_personalized_recommendation
+- ask_movie_recommendation
+- deny
+- goodbye
+- greet
+- movie_genre
+- request_rate_movie
+- movie_rate
+- rate_movie
+- request_sign_up
+- thank
+
+forms:
+  sign_up_form:
+    required_slots:
+    - name
+    - last_name
+    - age
+    - hobby
+    - favourite_genre
+  
+  identify_user_form:
+    required_slots:
+    - id_name
+    - id_last_name  
+
+entities:
+- movie_genre
+
+slots:
+  
+  request:
+    type: text
+    influence_conversation: false
+    mappings:
+    - type: from_text
+
+  response:
+    type: text
+    influence_conversation: false
+    mappings:
+    - type: from_text
+
+  generated_text:
+    type: text
+    influence_conversation: false
+    mappings:
+    - type: from_text
+
+  user_profile_id:
+    type: text
+    influence_conversation: false
+    mappings:
+    - type: from_text
+
+  name:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_text
+      conditions:
+      - active_loop: sign_up_form
+        requested_slot: name
+
+  last_name:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_text
+      conditions:
+      - active_loop: sign_up_form
+        requested_slot: last_name
+
+  id_name:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_text
+      conditions:
+      - active_loop: identify_user_form
+        requested_slot: id_name
+
+  id_last_name:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_text
+      conditions:
+      - active_loop: identify_user_form
+        requested_slot: id_last_name
+
+  age:
+    type: float
+    min_value: 0
+    max_value: 100
+    influence_conversation: true
+    mappings:
+    - type: from_text
+      conditions:
+      - active_loop: sign_up_form
+        requested_slot: age 
+  
+  favourite_genre:
+    type: text
+    influence_conversation: true 
+    mappings:
+    - type: from_text
+      conditions:
+      - active_loop: sign_up_form
+        requested_slot: favourite_genre 
+
+  hobby:
+    type: text
+    influence_conversation: true 
+    mappings:
+    - type: from_text
+      conditions:
+      - active_loop: sign_up_form
+        requested_slot: hobby
+
+  movie_genre:
+    type: text
+    influence_conversation: false
+    mappings:
+    - type: from_entity
+      entity: movie_genre
+      actions: utter_movie_genre
+
+
+
+responses:
+  utter_greet:
+  - text: Hi, I'm MovieBot! I'm here to be your movie guru, offering personalized recommendations based on your preferences.  You can ask for movie suggestions, create your unique profile for tailored experiences, or even identify your profile for a seamless return. Ready to explore movies your way? Let's dive into the cinematic universe together!🍿🎬 How can I help you today?
+  utter_goodbye:
+  - text: Have fun! Goodbye!
+  utter_continue:
+  - text: To continue and ask for a movie recommendation or anything else, say "bye" to restart the conversation.
+  utter_signup:
+  - text: You chose to sign up.
+  utter_personalization:
+  - text: Do you have an account or do you want to continue as a guest?
+  utter_check_profile:
+  - text:  Let me check if you already have an account. 
+  utter_identification:
+  - text:  Let me search for your existing account.
+  utter_identified_user:
+  - text: Hi {id_name} {id_last_name}! You're identified!
+  utter_movie_recommendation_path:
+  - text: You've selected the movie recommendation path.
+  utter_second_recommendation:
+  - text: Let me offer another recommendation for you.
+  - text: Apologies, let me try another recommendation.
+  utter_movie_genre:
+  - text: What movie genre do you like?
+  utter_check_genre:
+  - text: Want a movie recommendation in your favorite genre?
+  utter_ask_name:
+  - text: Can you please tell me your first name?
+  utter_ask_last_name:
+  - text: Can you please tell me your last name?
+  utter_ask_id_name:
+  - text: Can you please tell me your first name?
+  utter_ask_id_last_name:
+  - text: Can you please tell me your last name?
+  utter_ask_hobby:
+  - text: Thank you {name}! Now, could you also tell me one hobby or interest of yours?
+  utter_ask_age:
+  - text: Now, can you tell me your age?
+  utter_ask_favourite_genre:
+  - text: Lastly, {name}, what's your favorite movie genre?
+  utter_aknowledge_info:
+  - text: Thanks {name}! Your account has been created!
+  utter_check:
+  - text: Do you like this recommendation?
+
+actions:
+- '...'
+- action_generate_text
+- action_personalized_recommendation
+- action_personalized_recommendation_genre
+- user_identification
+- action_confirm_movie_genre
+- action_make_movie_recommendation
+- action_create_user_profile
+- action_access_user_profile
+- utter_identification
+- utter_identified_user
+- utter_check_profile
+- utter_update_profile
+- utter_ask_new_name
+- utter_ask_new_last_name
+- utter_ask_new_age
+- utter_ask_new_favourite_genre
+- utter_aknowledge_info
+- utter_ask_hobby
+- utter_ask_name
+ - utter_ask_id_name
+ - utter_ask_id_last_name
+- utter_ask_last_name
+- utter_ask_age
+- utter_ask_favourite_genre
+- utter_check
+- utter_continue
+- utter_goodbye
+- utter_greet
+- utter_movie_genre
+- utter_rate_value
+- utter_rate_recognition
+- utter_rate_form
+- utter_movie_rate
+- utter_movie_recommendation
+- utter_second_recommendation
+- utter_movie_recommendation_path
+- utter_signup
+- action_restart
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
